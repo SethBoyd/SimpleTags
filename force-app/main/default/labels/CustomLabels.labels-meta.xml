@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>TagLinkAddedSuccess</fullName>
+        <categories>Tags</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TagLinkAddedSuccess</shortDescription>
+        <value>Tag successfully linked</value>
+    </labels>
+    <labels>
+        <fullName>TagMappingNotConfigured</fullName>
+        <categories>Tags</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TagMappingNotConfigured</shortDescription>
+        <value>The object you are on is not configured for Tags</value>
+    </labels>
+</CustomLabels>

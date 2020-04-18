@@ -1,8 +1,8 @@
 {
-  "name": "salesforce-app",
+  "name": "simpletags",
   "private": true,
   "version": "1.0.0",
-  "description": "Salesforce App",
+  "description": "Simple Tags",
   "scripts": {
     "lint": "npm run lint:lwc",
     "lint:lwc": "eslint force-app/main/default/lwc",

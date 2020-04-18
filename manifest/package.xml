@@ -38,6 +38,8 @@
     <types>
       <members>TagLinkAddedSuccess</members>
       <members>TagMappingNotConfigured</members>
+      <members>TagRemoveError</members>
+      <members>TagRemoveSuccess</members>
       <name>CustomLabel</name>
     </types>
     <types>
@@ -45,13 +47,13 @@
         <name>CustomApplication</name>
     </types>
     <types>
-        <members>TagComponent</members>
+        <members>tagComponent</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>
         <members>Tag_Viewer</members>
         <members>Tag_User</members>
-        <members>Tag_User</members>
+        <members>Tag_Manager</members>
         <name>PermissionSet</name>
     </types>
     <version>48.0</version>

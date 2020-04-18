@@ -16,4 +16,20 @@
         <shortDescription>TagMappingNotConfigured</shortDescription>
         <value>The object you are on is not configured for Tags</value>
     </labels>
+    <labels>
+        <fullName>TagRemoveError</fullName>
+        <categories>Tags</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TagRemoveError</shortDescription>
+        <value>There was an error removing this tag please contact your system administrator</value>
+    </labels>
+    <labels>
+        <fullName>TagRemoveSuccess</fullName>
+        <categories>Tags</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TagRemoveSuccess</shortDescription>
+        <value>The selected tag has been removed</value>
+    </labels>
 </CustomLabels>

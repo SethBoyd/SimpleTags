@@ -15,7 +15,7 @@ public with sharing class TagController_Test {
         // set up test data
         Tag__c tag = new Tag__c(Name='DEMO TAG', Status__c='Active');
         insert tag;
-        Account account = new Account(Name='DEMO', Status__c='Active');
+        Account account = new Account(Name='DEMO');
         insert account;
 
         

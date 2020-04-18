@@ -13,9 +13,9 @@ public with sharing class TagController_Test {
     public static testmethod void basicSearch(){
         
         // set up test data
-        Tag__c tag = new Tag__c(Name='DEMO TAG');
+        Tag__c tag = new Tag__c(Name='DEMO TAG', Status__c='Active');
         insert tag;
-        Account account = new Account(Name='DEMO');
+        Account account = new Account(Name='DEMO', Status__c='Active');
         insert account;
 
         
@@ -33,9 +33,9 @@ public with sharing class TagController_Test {
     public static testmethod void basicSearchExistingTags(){
         
         // set up test data
-        Tag__c tagLinked = new Tag__c(Name='DEMO TAG');
+        Tag__c tagLinked = new Tag__c(Name='DEMO TAG', Status__c='Active');
         insert tagLinked;
-        Tag__c tagNotLinked = new Tag__c(Name='TAG DEMO');
+        Tag__c tagNotLinked = new Tag__c(Name='TAG DEMO', Status__c='Active');
         insert tagNotLinked;
         Account account = new Account(Name='DEMO');
         insert account;
@@ -63,9 +63,9 @@ public with sharing class TagController_Test {
     public static testmethod void basicAddTag(){
         
         // set up test data
-        Tag__c tagLinked = new Tag__c(Name='DEMO TAG');
+        Tag__c tagLinked = new Tag__c(Name='DEMO TAG', Status__c='Active');
         insert tagLinked;
-        Tag__c tagNotLinked = new Tag__c(Name='TAG DEMO');
+        Tag__c tagNotLinked = new Tag__c(Name='TAG DEMO', Status__c='Active');
         insert tagNotLinked;
         Account account = new Account(Name='DEMO');
         insert account;

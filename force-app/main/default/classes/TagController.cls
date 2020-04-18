@@ -148,7 +148,7 @@ public with sharing class TagController {
         // set up the searchKey
         string searchKey = '%' + searchTerm + '%';
         // perform actual search for tags that are availabe
-        List<Tag__c> tagsToReturn = [SELECT ID, Name FROM Tag__c WHERE ID NOT IN:existingTagIds AND Name LIKE:searchKey];
+        List<Tag__c> tagsToReturn = [SELECT ID, Name FROM Tag__c WHERE ID NOT IN:existingTagIds AND Name LIKE:searchKey AND Status__c=:'Active'];
         return tagsToReturn;
         
     }

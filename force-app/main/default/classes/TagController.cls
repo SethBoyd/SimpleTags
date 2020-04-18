@@ -8,6 +8,62 @@
 public with sharing class TagController {
 
     /**
+     * @description     confirm if the user can view tags only
+     * @param           string objectName used so we can check that specific field for access as well
+     * @return          boolean true they can create / edit / delete or false they can only view
+    */
+    @AuraEnabled
+    public static boolean userCanView(string objectName){
+
+        // return boolean
+        boolean returnvalue;
+
+        // get the correct objectName
+        string actualObjectName = TagHelper.getCorrectObjectName(objectName);
+
+        boolean accessTagLinks = TagHelper.isAccessible('Tag_Link__c', new List<String>{'Id', 'Name', 'Tag__c', 'TagName__c', actualObjectName});
+        boolean accessTags = TagHelper.isAccessible('Tag__c', new List<String>{'Id', 'Name'});
+        
+        if(accessTagLinks && accessTags){
+            returnvalue = true;
+        } else {
+            returnvalue = false;
+        }
+        return returnvalue;
+    }
+
+    /**
+     * @description     confirm if the user can create / edit / delete tags
+     * @param           string objectName used so we can check that specific field for access as well
+     * @return          boolean true they can create / edit / delete or false they can only view
+    */
+    @AuraEnabled
+    public static boolean userCanWorkWithTags(string objectName){
+
+        // return boolean
+        boolean returnvalue;
+
+        // get the correct objectName
+        string actualObjectName = TagHelper.getCorrectObjectName(objectName);
+
+        boolean accessTagLinks = TagHelper.isAccessible('Tag_Link__c', new List<String>{'Id', 'Name', 'Tag__c', 'TagName__c', actualObjectName});
+        system.debug('accessTagLinks > ' + accessTagLinks);
+        boolean accessTags = TagHelper.isAccessible('Tag__c', new List<String>{'Id', 'Name'});
+        system.debug('accessTags > ' + accessTags);
+        boolean createTagLinks = TagHelper.isCreateable('Tag_Link__c', new List<String>{'Tag__c', actualObjectName});
+        system.debug('createTagLinks > ' + createTagLinks);
+        boolean deleteTagLinks = TagHelper.isDeletable('Tag_Link__c');
+        system.debug('deleteTagLinks > ' + deleteTagLinks);
+
+        if(accessTagLinks && accessTags && createTagLinks && deleteTagLinks){
+            returnvalue = true;
+        } else {
+            returnvalue = false;
+        }
+        return returnvalue;
+    }
+
+    /**
      * @description     create tag link dynamically on any object
      * @param           tagId - the id of the tag
      * @param           recordId - the recordid we are currently on

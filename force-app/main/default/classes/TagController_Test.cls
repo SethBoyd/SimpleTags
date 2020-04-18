@@ -122,9 +122,158 @@ public with sharing class TagController_Test {
     }
 
     /**
+     * @description     perform permission checks on Viewer Permision set error
+    */
+    public static @IsTest void viewpermissioncheckerror(){
+
+        // get some strings ready for testing
+        ID profileId = [SELECT Id FROM Profile WHERE Name = 'Read Only' LIMIT 1].Id;
+        String orgId=UserInfo.getOrganizationId(); 
+        String dateString=String.valueof(Datetime.now()).replace(' ','').replace(':','').replace('-','');
+        Integer randomId=Integer.valueOf(Math.rint(Math.random()*1000000)); 
+        String uniqueName=orgId+dateString+randomId; 
+        User user = new User(
+            FirstName = 'DEMO',
+            LastName = 'DEMO', 
+            Email = uniqueName + '@test' + orgId + '.org', 
+            Username = uniqueName + '@test' + orgId + '.org', 
+            EmailEncodingKey = 'ISO-8859-1', 
+            Alias = uniqueName.substring(18, 23), 
+            TimeZoneSidKey = 'GMT',  
+            LocaleSidKey = 'en_GB', 
+            LanguageLocaleKey = 'en_US', 
+            ProfileId  = profileid); 
+        insert user;
+        
+        Test.startTest();
+        System.runAs(user){
+            boolean usernoaccessview = TagController.userCanView('Account');
+            system.assertEquals(false, usernoaccessview, 'User Does not have the correct permissions');
+            boolean usernoaccessmanage = TagController.userCanWorkWithTags('Account');
+            system.assertEquals(false, usernoaccessmanage, 'User Does not have the correct permissions');            
+        }
+        Test.stopTest();
+        
+    }
+
+    /**
+     * @description     perform permission checks on Viewer Permision set success
+    */
+    public static @IsTest void viewpermissionchecksuccess(){
+
+        // get some strings ready for testing
+        ID profileId = [SELECT Id FROM Profile WHERE Name = 'Read Only' LIMIT 1].Id;
+        String orgId=UserInfo.getOrganizationId(); 
+        String dateString=String.valueof(Datetime.now()).replace(' ','').replace(':','').replace('-','');
+        Integer randomId=Integer.valueOf(Math.rint(Math.random()*1000000)); 
+        String uniqueName=orgId+dateString+randomId; 
+        User user = new User(
+            FirstName = 'DEMO',
+            LastName = 'DEMO', 
+            Email = uniqueName + '@test' + orgId + '.org', 
+            Username = uniqueName + '@test' + orgId + '.org', 
+            EmailEncodingKey = 'ISO-8859-1', 
+            Alias = uniqueName.substring(18, 23), 
+            TimeZoneSidKey = 'GMT',  
+            LocaleSidKey = 'en_GB', 
+            LanguageLocaleKey = 'en_US', 
+            ProfileId  = profileid); 
+        insert user;
+
+        PermissionSet ps = [SELECT Id FROM PermissionSet WHERE Name = 'Tag_Viewer'];
+        insert new PermissionSetAssignment(AssigneeId = user.id, PermissionSetId = ps.Id);
+        
+        Test.startTest();
+        System.runAs(user){
+            boolean useraccessview = TagController.userCanView('Account');
+            system.assertEquals(true, useraccessview, 'User Does have the correct permissions');
+            boolean usernoaccessmanage = TagController.userCanWorkWithTags('Account');
+            system.assertEquals(false, usernoaccessmanage, 'User Does not have the correct permissions');             
+        }
+        Test.stopTest();
+        
+    }
+
+    /**
+     * @description     perform permission checks on User Permision set success
+    */
+    public static @IsTest void userpermissionchecksuccess(){
+
+        // get some strings ready for testing
+        ID profileId = [SELECT Id FROM Profile WHERE Name = 'Read Only' LIMIT 1].Id;
+        String orgId=UserInfo.getOrganizationId(); 
+        String dateString=String.valueof(Datetime.now()).replace(' ','').replace(':','').replace('-','');
+        Integer randomId=Integer.valueOf(Math.rint(Math.random()*1000000)); 
+        String uniqueName=orgId+dateString+randomId; 
+        User user = new User(
+            FirstName = 'DEMO',
+            LastName = 'DEMO', 
+            Email = uniqueName + '@test' + orgId + '.org', 
+            Username = uniqueName + '@test' + orgId + '.org', 
+            EmailEncodingKey = 'ISO-8859-1', 
+            Alias = uniqueName.substring(18, 23), 
+            TimeZoneSidKey = 'GMT',  
+            LocaleSidKey = 'en_GB', 
+            LanguageLocaleKey = 'en_US', 
+            ProfileId  = profileid); 
+        insert user;
+
+        PermissionSet ps = [SELECT Id FROM PermissionSet WHERE Name = 'Tag_User'];
+        insert new PermissionSetAssignment(AssigneeId = user.id, PermissionSetId = ps.Id);
+        
+        Test.startTest();
+        System.runAs(user){
+            boolean useraccessview = TagController.userCanView('Account');
+            system.assertEquals(true, useraccessview, 'User Does have the correct permissions');
+            boolean useraccessmanage = TagController.userCanWorkWithTags('Account');
+            system.assertEquals(true, useraccessmanage, 'User Does not have the correct permissions');             
+        }
+        Test.stopTest();
+        
+    }
+
+    /**
+     * @description     perform permission checks on Manager Permision set success
+    */
+    public static @IsTest void managerpermissionchecksuccess(){
+
+        // get some strings ready for testing
+        ID profileId = [SELECT Id FROM Profile WHERE Name = 'Read Only' LIMIT 1].Id;
+        String orgId=UserInfo.getOrganizationId(); 
+        String dateString=String.valueof(Datetime.now()).replace(' ','').replace(':','').replace('-','');
+        Integer randomId=Integer.valueOf(Math.rint(Math.random()*1000000)); 
+        String uniqueName=orgId+dateString+randomId; 
+        User user = new User(
+            FirstName = 'DEMO',
+            LastName = 'DEMO', 
+            Email = uniqueName + '@test' + orgId + '.org', 
+            Username = uniqueName + '@test' + orgId + '.org', 
+            EmailEncodingKey = 'ISO-8859-1', 
+            Alias = uniqueName.substring(18, 23), 
+            TimeZoneSidKey = 'GMT',  
+            LocaleSidKey = 'en_GB', 
+            LanguageLocaleKey = 'en_US', 
+            ProfileId  = profileid); 
+        insert user;
+
+        PermissionSet ps = [SELECT Id FROM PermissionSet WHERE Name = 'Tag_Manager'];
+        insert new PermissionSetAssignment(AssigneeId = user.id, PermissionSetId = ps.Id);
+        
+        Test.startTest();
+        System.runAs(user){
+            boolean useraccessview = TagController.userCanView('Account');
+            system.assertEquals(true, useraccessview, 'User Does have the correct permissions');
+            boolean useraccessmanage = TagController.userCanWorkWithTags('Account');
+            system.assertEquals(true, useraccessmanage, 'User Does have the correct permissions');             
+        }
+        Test.stopTest();
+        
+    }
+
+    /**
       * @description    simple test with current user permissions
-      **/
-      public static testmethod void testAccess() {
+    */
+    public static testmethod void testAccessgeneric() {
         System.assertEquals(true, TagHelper.isAccessible('Account', new List<String>{'Name', 'Phone'}), 'Current user has access to object and fields');
         System.assertEquals(true, TagHelper.isAccessible('Account', new List<String>()), 'Current user has access to object');
         System.assertEquals(true, TagHelper.isUpdateable('Account', new List<String>{'Name', 'Phone'}), 'Current user can update object and fields');
@@ -132,13 +281,13 @@ public with sharing class TagController_Test {
         System.assertEquals(true, TagHelper.isCreateable('Account', new List<String>{'Name', 'Phone'}), 'Current user can create to object and fields');
         System.assertNotEquals(true, TagHelper.isCreateable('Account', new List<String>{'id'}), 'Current user can not create account ID field');
         System.assertEquals(true, TagHelper.isDeletable('Account'), 'Current user has delete access to object and fields');
-      }
+    }
   
   
     /**
     * @description  test method with incorrect permissions for user
     **/
-    public static testmethod void testwithwrongpermissions()
+    public static testmethod void testwithwrongpermissionsgeneric()
     {
         // insert a account
         Account account = new Account(Name='Demo');
@@ -171,4 +320,5 @@ public with sharing class TagController_Test {
             System.assertEquals(false, TagHelper.isDeletable('Account'), 'Read only user can not delete');
         }
     }
+
 }

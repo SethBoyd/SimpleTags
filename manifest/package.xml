@@ -40,6 +40,8 @@
       <members>TagMappingNotConfigured</members>
       <members>TagRemoveError</members>
       <members>TagRemoveSuccess</members>
+      <members>TagNoAccess</members>
+      <members>TagNoTagsMatchYourSearch</members>
       <name>CustomLabel</name>
     </types>
     <types>

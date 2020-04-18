@@ -4,8 +4,12 @@ import getTags from '@salesforce/apex/TagController.getExistingTags';
 import searchTags from '@salesforce/apex/TagController.searchTags';
 import addTags from '@salesforce/apex/TagController.addtagtorecord';
 import removeTagLink from '@salesforce/apex/TagController.removeTagLink';
+import userCanWorkWithTags from '@salesforce/apex/TagController.userCanWorkWithTags';
+import userCanView from '@salesforce/apex/TagController.userCanView';
 import TagRemoveError from '@salesforce/label/c.TagRemoveError';
 import TagRemoveSuccess from '@salesforce/label/c.TagRemoveSuccess';
+import TagNoAccess from '@salesforce/label/c.TagNoAccess';
+import TagNoTagsMatchYourSearch from '@salesforce/label/c.TagNoTagsMatchYourSearch';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class TagComponent extends LightningElement {
@@ -13,6 +17,8 @@ export default class TagComponent extends LightningElement {
     label = {
         TagRemoveError,
         TagRemoveSuccess,
+        TagNoAccess,
+        TagNoTagsMatchYourSearch,
     };
 
     // setup api elements
@@ -24,7 +30,42 @@ export default class TagComponent extends LightningElement {
     @track errors;
     @track searchKey;
     @track searchTags;
+    @track searchTagsPresent;
     @track selectedValue;
+    @track canViewTags;
+    @track canManageTags;
+    @track loading = true;
+    @track timeoutId;
+
+    // handle can view tags check
+    handleuserCanView(){
+        userCanView({
+            objectName: this.objectApiName
+        })
+        .then((results) => {
+            this.canViewTags = results;
+            this.errors = undefined;  
+        })
+        .catch((error) => {
+            this.errors = JSON.stringify(error);
+            this.canViewTags = undefined;
+        });
+    }
+
+    // handle can manage tags check
+    handleuserCanWorkWithTags(){
+        userCanWorkWithTags({
+            objectName: this.objectApiName
+        })
+        .then((results) => {
+            this.canManageTags = results;
+            this.errors = undefined;  
+        })
+        .catch((error) => {
+            this.errors = JSON.stringify(error);
+            this.canManageTags = undefined;
+        });
+    }
 
     // get our tags to display
     handleGetTags() {
@@ -42,12 +83,18 @@ export default class TagComponent extends LightningElement {
         });
     }
 
-    // handle remove
-    handleRemove() {}
-
     // intial call back get out data
     connectedCallback() {
         this.handleGetTags();        
+        this.handleuserCanWorkWithTags();
+        this.handleuserCanView();
+        clearTimeout(this.timeoutId); // n
+        this.timeoutId = setTimeout(this.loadTags.bind(this), 500);
+    }
+
+    // confirming loading complete
+    loadTags(){
+        this.loading = false;
     }
 
     // handle errors no output for it back handling anyway
@@ -60,19 +107,29 @@ export default class TagComponent extends LightningElement {
         
         this.searchKey = event.target.value;
         
-        searchTags({
-            recordId: this.recordId,
-            objectName: this.objectApiName,
-            searchTerm: this.searchKey
-        })
-        .then((results) => {
-            this.searchTags = results;
-            this.errors = undefined;  
-        })
-        .catch((error) => {
-            this.errors = JSON.stringify(error);
-            this.searchTags = undefined;
-        });
+        if(this.searchKey.length > 2){
+            searchTags({
+                recordId: this.recordId,
+                objectName: this.objectApiName,
+                searchTerm: this.searchKey
+            })
+            .then((results) => {
+                this.searchTags = results;
+                this.errors = undefined;  
+                if(results.length > 0){
+                    this.searchTagsPresent = true;
+                } else {
+                    this.searchTagsPresent = false;
+                }
+            })
+            .catch((error) => {
+                this.errors = JSON.stringify(error);
+                this.searchTags = undefined;
+            });
+        } else {
+            this.searchTagsPresent = null;
+            this.searchTags = null;
+        }
     }
 
     // handle the removal of a tag

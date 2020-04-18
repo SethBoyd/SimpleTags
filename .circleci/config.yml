@@ -18,7 +18,7 @@ jobs:
       - run:
             name: Assign Permission Set
             command: |
-                sfdx force:user:permset:assign -n Help_Message_Editor
+                sfdx force:user:permset:assign -n Tag_Manager
       - run:
             name: Run Apex Tests
             command: |

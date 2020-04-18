@@ -1,5 +1,5 @@
 [![codecov](https://codecov.io/gh/HYPHENATE/SimpleTags/branch/master/graph/badge.svg)](https://codecov.io/gh/HYPHENATE/SimpleTags)
-[![HYPHENATE](https://circleci.com/gh/HYPHENATE/SimpleTags.svg?style=svg&&circle-token=297c83f424a06b21dc3b4fa042318223464f67d7)](https://circleci.com/gh/SimpleTags/SimpleTags)
+[![HYPHENATE](https://circleci.com/gh/HYPHENATE/SimpleTags.svg?style=svg&&circle-token=297c83f424a06b21dc3b4fa042318223464f67d7)](https://circleci.com/gh/HYPHENATE/SimpleTags)
 
 # Simple Tags
 A very simple solution to providing tagging that is reportable in Salesforce. Since the switch to Lightning the easy ability to take a record without using Topics in chatter and then report on them has been limited. This simple application fills that gap. We see this requirement come up a lot in the Nonprofit world the need to tag a grant based on theme, category, location and potentially funder. This can be acheived with dependent multi-select picklists but as we all know reporting on them is a pain.

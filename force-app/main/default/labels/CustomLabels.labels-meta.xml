@@ -17,6 +17,22 @@
         <value>The object you are on is not configured for Tags</value>
     </labels>
     <labels>
+        <fullName>TagNoAccess</fullName>
+        <categories>Tags</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TagNoAccess</shortDescription>
+        <value>You do not have contact to Tagging, please contact your system administrator to request permissions.</value>
+    </labels>
+    <labels>
+        <fullName>TagNoTagsMatchYourSearch</fullName>
+        <categories>Tags</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TagNoTagsMatchYourSearch</shortDescription>
+        <value>Sorry no tags match your search try again please</value>
+    </labels>
+    <labels>
         <fullName>TagRemoveError</fullName>
         <categories>Tags</categories>
         <language>en_US</language>

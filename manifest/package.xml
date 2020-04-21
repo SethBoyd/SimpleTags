@@ -45,12 +45,8 @@
       <name>CustomLabel</name>
     </types>
     <types>
-        <members>Tags</members>
-        <name>ReportFolder</name>
-    </types>
-    <types>
-        <members>Tags/All_Tags_zxx</members>
-        <members>Tags/Tagged_Accounts_Summary_hrA</members>
+        <members>Tags\All_Tags_zxx</members>
+        <members>Tags\Tagged_Accounts_Summary_hrA</members>
         <name>Report</name>
     </types>
     <types>

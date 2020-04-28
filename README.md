@@ -22,7 +22,8 @@ A very simple solution to providing tagging that is reportable in Salesforce. Si
 1. Ensure my domain is actived and deployed
 2. Ensure path is activated
 3. Install using the deploy to salesforce link
-4. Start configuration
+4. Assign Permissions Set to users
+5. Start configuration
 
 ## Part 2: Configuration
 
@@ -32,6 +33,8 @@ A very simple solution to providing tagging that is reportable in Salesforce. Si
 4. Visit an account search for the Tag you added
 5. Select the tag
 6. Expand to other objects follow this video (insert video link here)
+
+<a href="https://web.microsoftstream.com/video/41b0fcca-337e-4eb4-aaf1-525764d6453d">Configuration Video</a>
 
 ## Part 3: Limitations
 - A Tag Link can only be related to a max of 38 different Standard or Custom Objects

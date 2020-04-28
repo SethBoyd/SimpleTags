@@ -4,6 +4,8 @@
 # Simple Tags
 A very simple solution to providing tagging that is reportable in Salesforce. Since the switch to Lightning the easy ability to take a record without using Topics in chatter and then report on them has been limited. This simple application fills that gap. We see this requirement come up a lot in the Nonprofit world the need to tag a grant based on theme, category, location and potentially funder. This can be acheived with dependent multi-select picklists but as we all know reporting on them is a pain.
 
+<img src="https://github.com/HYPHENATE/SimpleTags/blob/master/SimpleTags.png?raw=true" width="800px"/>
+
 ## Verion Control
 
 ### 1.0 - Initial release
@@ -29,10 +31,10 @@ A very simple solution to providing tagging that is reportable in Salesforce. Si
 
 1. Go to Account Lightning Page
 2. Add tagComponent to the Page
-3. Create a Tag
+3. Create some Tags using the Tags Tab
 4. Visit an account search for the Tag you added
 5. Select the tag
-6. Expand to other objects follow this video (insert video link here)
+6. Expand to other objects using the video below from 7 minutes in:
 
 <a href="https://web.microsoftstream.com/video/41b0fcca-337e-4eb4-aaf1-525764d6453d">Configuration Video</a>
 

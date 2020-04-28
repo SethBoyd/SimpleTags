@@ -22,7 +22,7 @@ A very simple solution to providing tagging that is reportable in Salesforce. Si
 1. Ensure my domain is actived and deployed
 2. Ensure path is activated
 3. Install using the deploy to salesforce link
-4. Assign the Tag_User, Tag_Viewer and Tag_ManagerPermissions Set to relevant users
+4. Assign the Tag_User, Tag_Viewer and Tag_Manager Permissions Set to relevant users
 5. Start configuration
 
 ## Part 2: Configuration

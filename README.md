@@ -8,7 +8,10 @@ A very simple solution to providing tagging that is reportable in Salesforce. Si
 
 ## Verion Control
 
-### 1.0 - Initial release
+### 1.0.1 - Initial feedback
+- resolve issue where Permission sets were missing apex class method access (https://github.com/HYPHENATE/SimpleTags/issues/2)
+
+### 1.0.0 - Initial release
 - Basic Tag Handling
 - Configure the Tag Record relationship via custom meta data
 - Dedicated permissions for different people

@@ -2,7 +2,7 @@
     <lightning-card>
         <h3 slot="title">
             <lightning-icon icon-name="standard:catalog" size="small"></lightning-icon>
-            &nbsp;&nbsp;&nbsp;Tags
+            &nbsp;&nbsp;&nbsp;<span if:true={isPrivate}>Private </span>Tags
         </h3>
         <template if:true={loading}>
             <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>

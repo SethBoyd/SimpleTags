@@ -11,6 +11,7 @@ import TagRemoveSuccess from '@salesforce/label/c.TagRemoveSuccess';
 import TagNoAccess from '@salesforce/label/c.TagNoAccess';
 import TagNoTagsMatchYourSearch from '@salesforce/label/c.TagNoTagsMatchYourSearch';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import Id from '@salesforce/user/Id';
 
 export default class TagComponent extends LightningElement {
 
@@ -24,6 +25,10 @@ export default class TagComponent extends LightningElement {
     // setup api elements
     @api recordId;
     @api objectApiName;
+    @api isPrivate = false;
+
+    userId = Id;
+    sendUserId = null; // Will default to null or be set to current User Id if working isPrivate = true
 
     // setup tracking
     @track tags;
@@ -71,7 +76,8 @@ export default class TagComponent extends LightningElement {
     handleGetTags() {
         getTags({
             recordId: this.recordId,
-            objectName: this.objectApiName
+            objectName: this.objectApiName,
+            userId: this.sendUserId
         })
         .then((results) => {
             this.tags = results;
@@ -83,8 +89,15 @@ export default class TagComponent extends LightningElement {
         });
     }
 
+    handleIsPrivate() {
+        if (this.isPrivate) {
+            this.sendUserId = this.userId;
+        }
+    }
+
     // intial call back get out data
     connectedCallback() {
+        this.handleIsPrivate();
         this.handleGetTags();        
         this.handleuserCanWorkWithTags();
         this.handleuserCanView();
@@ -111,7 +124,8 @@ export default class TagComponent extends LightningElement {
             searchTags({
                 recordId: this.recordId,
                 objectName: this.objectApiName,
-                searchTerm: this.searchKey
+                searchTerm: this.searchKey,
+                userId: this.sendUserId
             })
             .then((results) => {
                 this.searchTags = results;

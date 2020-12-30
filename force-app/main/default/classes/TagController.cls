@@ -108,13 +108,13 @@ public with sharing class TagController {
      * @return          List<Tag_Link__c>
     */
     @AuraEnabled
-    public static List<Tag_Link__c> getExistingTags(string recordId, string objectName){
+    public static List<Tag_Link__c> getExistingTags(string recordId, string objectName, Id userId){
         
         // get the correct objectName
         string actualObjectName = TagHelper.getCorrectObjectName(objectName);
 
         // build up query string
-        string query = 'SELECT ID, TagName__c FROM Tag_Link__c WHERE ' + actualObjectName + '=:recordId ORDER BY TagName__c';
+        string query = 'SELECT ID, TagName__c, Tag_Category__c FROM Tag_Link__c WHERE Tag__r.Related_User__c = :userId AND ' + actualObjectName + '=:recordId ORDER BY TagName__c';
 
         // perform query
         List<Tag_Link__c> returntags = Database.query(query);
@@ -131,12 +131,12 @@ public with sharing class TagController {
      * @return              return List<Tag__c> list of tages for selection
     */
     @AuraEnabled
-    public static List<Tag__c> searchTags(string recordId, string objectName, string searchTerm){
+    public static List<Tag__c> searchTags(string recordId, string objectName, string searchTerm, Id userId){
 
         // get the correct objectName
         string actualObjectName = TagHelper.getCorrectObjectName(objectName);
         // build the query to check what tags are linked to the current record
-        string existingTagSearch = 'SELECT ID, Tag__c, TagName__c FROM Tag_Link__c WHERE ' + actualObjectName + '=:recordId';
+        string existingTagSearch = 'SELECT ID, Tag__c, TagName__c, Tag_Category__c FROM Tag_Link__c WHERE Tag__r.Related_User__c = :userId AND ' + actualObjectName + '=:recordId';
         // perform actual query
         List<Tag_Link__c> existingTags = Database.query(existingTagSearch);
         // set for confirming an existing tags linked to record
@@ -148,7 +148,7 @@ public with sharing class TagController {
         // set up the searchKey
         string searchKey = '%' + searchTerm + '%';
         // perform actual search for tags that are availabe
-        List<Tag__c> tagsToReturn = [SELECT ID, Name FROM Tag__c WHERE ID NOT IN:existingTagIds AND Name LIKE:searchKey AND Status__c=:'Active'];
+        List<Tag__c> tagsToReturn = [SELECT ID, Name FROM Tag__c WHERE ID NOT IN:existingTagIds AND Name LIKE:searchKey AND Status__c=:'Active' AND Related_User__c = :userId];
         return tagsToReturn;
         
     }

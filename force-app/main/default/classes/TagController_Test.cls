@@ -20,10 +20,55 @@ public with sharing class TagController_Test {
 
         
         // pull back list of tag links
-        List<Tag__c> tagLinks = TagController.searchTags(account.Id, 'Account', 'DEMO TAG');
+        List<Tag__c> tagLinks = TagController.searchTags(account.Id, 'Account', 'DEMO TAG', null);
 
         // confirm we have the right amount of tag links
         system.assertEquals(1, tagLinks.size(), 'Expected number of tag in response');
+        
+    }
+    
+    /**
+     * @description     test a basic private search
+    */
+    public static testmethod void basicPrivateSearch(){
+
+        // get some strings ready for testing
+        ID profileId = [SELECT Id FROM Profile WHERE Name = 'Read Only' LIMIT 1].Id;
+        String orgId=UserInfo.getOrganizationId(); 
+        String dateString=String.valueof(Datetime.now()).replace(' ','').replace(':','').replace('-','');
+        Integer randomId=Integer.valueOf(Math.rint(Math.random()*1000000)); 
+        String uniqueName=orgId+dateString+randomId; 
+        User user = new User(
+            FirstName = 'DEMO',
+            LastName = 'DEMO', 
+            Email = uniqueName + '@test' + orgId + '.org', 
+            Username = uniqueName + '@test' + orgId + '.org', 
+            EmailEncodingKey = 'ISO-8859-1', 
+            Alias = uniqueName.substring(18, 23), 
+            TimeZoneSidKey = 'GMT',  
+            LocaleSidKey = 'en_GB', 
+            LanguageLocaleKey = 'en_US', 
+            ProfileId  = profileid); 
+        insert user;
+        
+        // set up test data
+        Tag__c tag = new Tag__c(Name='DEMO TAG', Status__c='Active', Related_User__c=user.Id);
+        insert tag;
+        Account account = new Account(Name='DEMO');
+        insert account;
+
+        
+        // pull back list of tag links
+        List<Tag__c> tagLinks = TagController.searchTags(account.Id, 'Account', 'DEMO TAG', null);
+
+        // confirm we have the right amount of tag links
+        system.assertEquals(0, tagLinks.size(), 'No public tags should exist');
+
+        // pull back list of tag links
+        tagLinks = TagController.searchTags(account.Id, 'Account', 'DEMO TAG', user.Id);
+
+        // confirm we have the right amount of tag links
+        system.assertEquals(1, tagLinks.size(), '1 private tag should have been returned');
         
     }
 
@@ -44,18 +89,66 @@ public with sharing class TagController_Test {
 
         
         // pull back list of tag links
-        List<Tag__c> tagLinks = TagController.searchTags(account.Id, 'Account', 'TAG DEMO');
+        List<Tag__c> tagLinks = TagController.searchTags(account.Id, 'Account', 'TAG DEMO', null);
 
         // confirm we have the right amount of tags
         system.assertEquals(1, tagLinks.size(), 'Expected number of tags in response');
 
         // pull back existing tags
-        List<Tag_Link__c> existingTagLinks = TagController.getExistingTags(account.Id, 'Account');
+        List<Tag_Link__c> existingTagLinks = TagController.getExistingTags(account.Id, 'Account', null);
 
         // confirm we have the right amount of tag links
         system.assertEquals(1, existingTagLinks.size(), 'Expected number of tag links in response');
         
     }
+
+    /**
+     * @description     test a basic private search
+    */
+    public static testmethod void basicPrivateSearchExistingTags(){
+
+        // get some strings ready for testing
+        ID profileId = [SELECT Id FROM Profile WHERE Name = 'Read Only' LIMIT 1].Id;
+        String orgId=UserInfo.getOrganizationId(); 
+        String dateString=String.valueof(Datetime.now()).replace(' ','').replace(':','').replace('-','');
+        Integer randomId=Integer.valueOf(Math.rint(Math.random()*1000000)); 
+        String uniqueName=orgId+dateString+randomId; 
+        User user = new User(
+            FirstName = 'DEMO',
+            LastName = 'DEMO', 
+            Email = uniqueName + '@test' + orgId + '.org', 
+            Username = uniqueName + '@test' + orgId + '.org', 
+            EmailEncodingKey = 'ISO-8859-1', 
+            Alias = uniqueName.substring(18, 23), 
+            TimeZoneSidKey = 'GMT',  
+            LocaleSidKey = 'en_GB', 
+            LanguageLocaleKey = 'en_US', 
+            ProfileId  = profileid); 
+        insert user;
+        
+        Tag__c tagLinked = new Tag__c(Name='DEMO TAG', Status__c='Active', Related_User__c=user.Id);
+        insert tagLinked;
+        Tag__c tagNotLinked = new Tag__c(Name='TAG DEMO', Status__c='Active', Related_User__c=user.Id);
+        insert tagNotLinked;
+        Account account = new Account(Name='DEMO');
+        insert account;
+        Tag_Link__c tagLink = new Tag_Link__c(Tag__c=tagLinked.Id, Account__c=account.Id);
+        insert tagLink;
+
+        
+        // pull back list of tag links
+        List<Tag__c> tagLinks = TagController.searchTags(account.Id, 'Account', 'TAG DEMO', user.Id);
+
+        // confirm we have the right amount of tag links
+        system.assertEquals(1, tagLinks.size(), '1 private unlinked tag should be returned');
+
+        // pull back existing tags
+        List<Tag_Link__c> existingTagLinks = TagController.getExistingTags(account.Id, 'Account', user.Id);
+
+        // confirm we have the right amount of tag links
+        system.assertEquals(1, existingTagLinks.size(), 'Expected number of tag links in response');
+    }
+
 
     /**
      * @description     test adding a tag then searching for and checking existing list
@@ -72,13 +165,13 @@ public with sharing class TagController_Test {
 
         
         // pull back list of tag links
-        List<Tag__c> tagLinks = TagController.searchTags(account.Id, 'Account', 'DEMO');
+        List<Tag__c> tagLinks = TagController.searchTags(account.Id, 'Account', 'DEMO', null);
 
         // confirm we have the right amount of tags
         system.assertEquals(2, tagLinks.size(), 'Expected number of tags in response');
 
         // pull back existing tags
-        List<Tag_Link__c> existingTagLinks = TagController.getExistingTags(account.Id, 'Account');
+        List<Tag_Link__c> existingTagLinks = TagController.getExistingTags(account.Id, 'Account', null);
 
         // confirm we have the right amount of tag links
         system.assertEquals(0, existingTagLinks.size(), 'Expected number of tag links in response');
@@ -96,13 +189,13 @@ public with sharing class TagController_Test {
         system.assertNotEquals(addTagBad, Label.TagLinkAddedSuccess, 'Got Correct Response');
 
         // pull back list of tag links
-        List<Tag__c> tagLinksPostAdd = TagController.searchTags(account.Id, 'Account', 'DEMO');
+        List<Tag__c> tagLinksPostAdd = TagController.searchTags(account.Id, 'Account', 'DEMO', null);
 
         // confirm we have the right amount of tags
         system.assertEquals(1, tagLinksPostAdd.size(), 'Expected number of tags in response');
 
         // pull back existing tags
-        List<Tag_Link__c> existingTagLinksPostAdd = TagController.getExistingTags(account.Id, 'Account');
+        List<Tag_Link__c> existingTagLinksPostAdd = TagController.getExistingTags(account.Id, 'Account', null);
 
         // confirm we have the right amount of tag links
         system.assertEquals(1, existingTagLinksPostAdd.size(), 'Expected number of tag links in response');
